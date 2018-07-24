@@ -13,7 +13,7 @@ For people who are new in this area, it is recommended to read reference's secti
 - when the input image passes through feed-forward convolutional neural network, each layer acts as a collection of filters, which extract certain features from the image
 - It is found that, with pre-trained weights, style and content can be obtained and, therefore, it is possible to merge both of them into a new image 
 
-![paper](Images/style and loss.JPG)
+![paper](Images/paper.JPG)
 
 ## How to implement
 
