@@ -1,11 +1,8 @@
 
-# coding: utf-8
-
-# In[1]:
-
+### Some parts of this following codes - particulary VGG.py - are derived from 
+### Chip Huyen, CS 20: Tensorflow for Deep Learning Research, Stanford
 
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 import time
 import numpy as np
 import tensorflow as tf
@@ -14,26 +11,18 @@ import cv2
 import matplotlib.pyplot as plt
 import utils
 
-
-# In[2]:
-
-
 ##############################
 ### setup hyper parameter
 ##############################
-STYLE_LOSS_WEIGHT = 1000
+STYLE_LOSS_WEIGHT = 100
 CONTENT_LOSS_WEIGHT = 1
-LEARNING_RATE = 10
+LEARNING_RATE = 2
 CONTENT_LAYERS = ['conv4_2']
 STYLE_LAYERS = ['conv1_1', 'conv2_1', 'conv3_1', 'conv4_1', 'conv5_1']
 ### with lower value, the weight on the early layer will be higher
-STYLE_WEIGHT_TREND = 0.2
-TRAINING_EPOCH = 2000
+STYLE_WEIGHT_TREND = 0.06
+TRAINING_EPOCH = 1500
 tf.reset_default_graph()
-
-
-# In[ ]:
-
 
 
 class Style_Transfer(object):
@@ -135,7 +124,7 @@ class Style_Transfer(object):
         self.calculate_style_loss(gen_style_layers, style_layers)
         
         ### calculate total loss based on style weight and content weight
-        self.total_loss = self.content_loss_weight*self.style_loss + self.style_loss_weight*self.content_loss 
+        self.total_loss = self.style_loss_weight*self.style_loss + self.content_loss_weight*self.content_loss 
     
     def optimize(self):
         self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.total_loss,
@@ -159,17 +148,15 @@ class Style_Transfer(object):
             for i in range(self.training_epoch):
                 sess.run(self.optimizer)
                 loss = sess.run(self.total_loss)
-                if (i+1) % 1 == 0:
-                    print("epoch {}: total_loss = {}".format(i, loss))
+                if (i+1) % 300 == 0:
+                    print("epoch {}: total_loss = {}".format(i+1, loss))
                     x = sess.run(self.img_input) + self.vgg.mean_pixels
                     x = np.clip(x,0,255).astype('uint8')
-                    #utils.save_image(filename, gen_image)
-                    #print(x)
-                    cv2.imwrite('./outputs/' + str(i) + '.jpg',cv2.cvtColor(x[0], cv2.COLOR_RGB2BGR))
+                    cv2.imwrite('./outputs/' + str(i) + 'styleweight:' + str(self.style_loss_weight) + " exp:" + str(self.style_weight_trend) + '-28.jpg',
+                                cv2.cvtColor(x[0],cv2.COLOR_RGB2BGR))
                     
 if __name__ == '__main__':
-    machine = Style_Transfer('./content/content9.jpg', './content/style6.jpg', 300, 300)
+    machine = Style_Transfer('./content/content1.jpg', './content/style1.jpg', 300, 300)
     machine.build()
     machine.train()
-
 
