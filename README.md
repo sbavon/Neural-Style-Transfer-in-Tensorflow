@@ -49,6 +49,9 @@ For people who are new in this area, it is recommended to read reference's secti
 
 ![style_loss](Images/style_loss.JPG)
 
+## Execution
+- Run *style_transfer.py* and you will see the generated file in *outputs* folder 
+
 ## Dependencies
 - Tensorflow
 - cv2
