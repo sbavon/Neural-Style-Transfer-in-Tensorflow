@@ -1,38 +1,34 @@
-# Neural Style Transfer in Tensorflow - Short Note
+# Neural Style Transfer in Tensorflow
 
-This personal note is perhaps for a person who is already familiar with the concept of neural style transfer.
-For people who are new in this area, it is recommended to read reference's section belows:
+This repository has an objective to implement Neural Style Transfer according to [A Neural Algorithm of Artistic Style](https://arxiv.org/abs/1508.06576). Tensorflow and Python3 are used for development, and pre-trained VGG19 is adapted from [CS20: "TensorFlow for Deep Learning Research", Stanford](http://web.stanford.edu/class/cs20si/)
+
+To understand this following note, I would recommend to know the concept of convolutional neural network
 
 ## What is Neural Style Transfer
-- Neural Style Transfer is the technique that creates a new image with a certain style from an artistic image
-- It can be understood easily through the examples below:
+Neural Style Transfer is the technique that creates a new image with the style derived from an artistic image. It can be understood easily through the examples below:
 ![example1](Images/example1.JPG)
 ![example2](Images/example2.JPG)
   
 ## High-Level Intuition
-- when the input image passes through feed-forward convolutional neural network, each layer acts as a collection of filters, which extract certain features from the image
-- It is found that, with pre-trained weights, style and content can be obtained and, therefore, it is possible to merge both of them into a new image 
+In general, when the input image is passed through feed-forward convolutional neural network, hidden layers act as a collection of filters, which extract certain features from the image. With regard to [A Neural Algorithm of Artistic Style](https://arxiv.org/abs/1508.06576), through internal representations, it is possible to manipulate content and style of that image and, therefore, style can be transferred to other images 
 
 ![paper](Images/paper.JPG)
 
-## How to implement
+## Implementation
 
 ### Pre-Processing
 - Firstly, we need to build the VGG model and load pre-defined weights
 - In this part, with some modification, I use the code from *Chip Huyen, CS20: "TensorFlow for Deep Learning Research", Stanford*
 
 ### Model Implementation
-- Unlike traditional nerual network, we train the model to update the generated image
-- In other words, the weights and biases of the model are fixed, but the input image (generated image) is trainable
+- Unlike traditional nerual network, the image variables are used as a trainable parameters while weights and biases of the model are fixed
 
 #### Loss function
-- In neural style transfer, loss function can be broken into Content Loss and Style Loss
+- In neural style transfer, loss function is compose of Content Loss and Style Loss
 ![lossflow](Images/loss_image.JPG)
 
 ##### Content Loss
-- To calculate content loss, we use the square error of two sets of value
-  - activated function's values of content image in a certain content layer
-  - activated function's values of generated image in a certain content layer
+- To calculate content loss, we use the square error of hidden representations between input image and generated image
   
 ![content_loss](Images/Content_loss.JPG)
 
@@ -40,17 +36,16 @@ For people who are new in this area, it is recommended to read reference's secti
 
 
 ##### Style Loss
-- Calculating style loss is a bit trickier
-- It is needed to calculate the Gram Matrix to find the correlations among filters on a certain layer
+- Calculating style loss is a bit trickier. It is needed to calculate the Gram Matrix to find the correlations among filters first
 
 ![GRAM](Images/gram_matrix.JPG)
 
-- After getting a Gram Matrix, we calculate the square error to obtain style loss
+- And after getting a Gram Matrix, we calculate the square error to obtain style loss
 
 ![style_loss](Images/style_loss.JPG)
 
 ## Execution
-- Run *style_transfer.py* and you will see the generated file in *outputs* folder 
+- Run *style_transfer.py* and generated image will be available in *outputs* folder 
 
 ## Dependencies
 - Tensorflow
